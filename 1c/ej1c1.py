@@ -43,51 +43,56 @@ from typing import List
 
 def quicksort(arr: List[int]) -> List[int]:
     if len(arr) <= 1:
-        return arr
-    pivot = 
-    left = 
-    middle = 
-    right = 
-    return quicksort(left) + middle + quicksort(right)
+        return arr[:]
+    pivot_idx = len(arr) // 2
+    pivot = arr[pivot_idx]
+    left  = [x for x in arr[:pivot_idx] + arr[pivot_idx+1:] if x < pivot]
+    right = [x for x in arr[:pivot_idx] + arr[pivot_idx+1:] if x >= pivot]
+    return quicksort(left) + [pivot] + quicksort(right)
 
 
 def mergesort(arr: List[int]) -> List[int]:
     if len(arr) <= 1:
-        return arr
-    middle = 
-    left = 
-    right = 
+        return arr[:]
+    middle = len(arr)//2
+    left = mergesort(arr[middle:])
+    right = mergesort(arr[:middle])
     return merge(left, right)
 
 
 def merge(left: List[int], right: List[int]) -> List[int]:
-    result =
-    while left and right:
-        if left[0] < 
-            result.append()
+    i = j = 0
+    result: List[int] = []
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:   # <= para que sea estable
+            result.append(left[i])
+            i += 1
         else:
-            result.append()
-    result.extend()
+            result.append(right[j])
+            j += 1
+    # añade restos
+    result.extend(left[i:])
+    result.extend(right[j:])
     return result
 
 
 # Para probar el código, descomenta las siguientes líneas
-# if __name__ == "__main__":
-#     sizes = [100]  
-#     for size in sizes:
-#         test_array = [random.randint(1, 100) for _ in range(size)]
+if __name__ == "__main__":
+    sizes = [100]  
+    for size in sizes:
+        test_array = [random.randint(1, 100) for _ in range(size)]
         
-#         print(f"\nOriginal array (first 10 elements of {size}):")
-#         print(test_array[:10])  
+        print(f"\nOriginal array (first 10 elements of {size}):")
+        print(test_array[:10])  
         
-#         start = time.time()
-#         sorted_array_quicksort = quicksort(test_array.copy())
-#         end_time = time.time() - start
-#         print(f"Quicksort on {size} elements took: {end_time:.5f} seconds.")
-#         print("First 10 elements after Quicksort:", sorted_array_quicksort[:10])
+        start = time.time()
+        sorted_array_quicksort = quicksort(test_array.copy())
+        end_time = time.time() - start
+        print(f"Quicksort on {size} elements took: {end_time:.5f} seconds.")
+        print("First 10 elements after Quicksort:", sorted_array_quicksort[:10])
         
-#         start = time.time()
-#         sorted_array_mergesort = mergesort(test_array.copy())
-#         end_time = time.time() - start
-#         print(f"Mergesort on {size} elements took: {end_time:.5f} seconds.")
-#         print("First 10 elements after Mergesort:", sorted_array_mergesort[:10])
+        start = time.time()
+        sorted_array_mergesort = mergesort(test_array.copy())
+        end_time = time.time() - start
+        print(f"Mergesort on {size} elements took: {end_time:.5f} seconds.")
+        print("First 10 elements after Mergesort:", sorted_array_mergesort[:10])
